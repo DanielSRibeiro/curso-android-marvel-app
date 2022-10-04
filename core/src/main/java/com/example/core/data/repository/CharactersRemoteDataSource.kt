@@ -1,6 +1,6 @@
 package com.example.core.data.repository
 
-interface CharactersDataSource<T> {
+interface CharactersRemoteDataSource<T> {
 
     suspend fun fetchCharacters(queries: Map<String, String>) : T
 }
