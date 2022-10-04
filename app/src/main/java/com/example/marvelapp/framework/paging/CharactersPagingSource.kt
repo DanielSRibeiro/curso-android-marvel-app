@@ -5,13 +5,14 @@ import androidx.paging.PagingState
 import com.example.core.data.repository.CharactersRemoteDataSource
 import com.example.core.domain.model.Character
 import com.example.marvelapp.framework.network.response.DataWrapperResponse
-import com.example.marvelapp.framework.network.response.toCharactersModel
+import com.example.marvelapp.framework.network.response.toCharacterModel
 
 class CharactersPagingSource(
     private val remoteDataSource: CharactersRemoteDataSource<DataWrapperResponse>,
     private val query: String
 ) : PagingSource<Int, Character>() {
 
+    @Suppress("TooGenericExceptionCaught")
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Character> {
         return try {
             val offset = params.key ?: 0
@@ -30,7 +31,7 @@ class CharactersPagingSource(
 
 
             LoadResult.Page(
-                data = response.data.results.map { it.toCharactersModel() },
+                data = response.data.results.map { it.toCharacterModel() },
                 prevKey = null,
                 nextKey = if (responseOffset < totalCharacters) responseOffset + LIMIT
                 else null

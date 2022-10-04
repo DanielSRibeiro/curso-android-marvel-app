@@ -24,9 +24,11 @@ object NetworkModule {
     @Provides
     fun provideLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
-            if(BuildConfig.DEBUG){
-                HttpLoggingInterceptor.Level.BODY
-            } else HttpLoggingInterceptor.Level.NONE
+            setLevel(
+                if(BuildConfig.DEBUG){
+                    HttpLoggingInterceptor.Level.BODY
+                } else HttpLoggingInterceptor.Level.NONE
+            )
         }
     }
 
@@ -35,7 +37,7 @@ object NetworkModule {
         return AuthorizationInterceptor(
             publicKey = BuildConfig.PUBLIC_KEY,
             privateKey = BuildConfig.PRIVATE_KEY,
-            calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC")),
+            calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
         )
     }
 
