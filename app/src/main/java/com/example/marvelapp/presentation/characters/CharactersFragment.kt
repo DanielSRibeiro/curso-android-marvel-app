@@ -1,6 +1,6 @@
 package com.example.marvelapp.presentation.characters
 
-import android.os.Bundle
+import  android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
