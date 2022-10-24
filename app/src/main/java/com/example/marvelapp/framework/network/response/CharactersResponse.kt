@@ -1,11 +1,12 @@
 package com.example.marvelapp.framework.network.response
 
 import com.example.core.domain.model.Character
+import com.google.gson.annotations.SerializedName
 
 data class CharactersResponse(
-    val id : String,
-    val name : String,
-    val thumbnail: ThumbnailResponse
+    @SerializedName("id") val id : String,
+    @SerializedName("name") val name : String,
+    @SerializedName("thumbnail") val thumbnail: ThumbnailResponse
 )
 
 fun CharactersResponse.toCharacterModel() : Character {
