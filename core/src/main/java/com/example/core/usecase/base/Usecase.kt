@@ -4,6 +4,8 @@ import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 abstract class Usecase<in P, R> {
 
@@ -14,7 +16,7 @@ abstract class Usecase<in P, R> {
         emit(ResultStatus.Error(throwable))
     }
 
-    protected abstract fun doWork(params: P): ResultStatus<R>
+    protected abstract suspend fun doWork(params: P): ResultStatus<R>
 }
 
 abstract class PagingUseCase<in P, R : Any> {

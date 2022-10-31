@@ -10,13 +10,18 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.example.marvelapp.R
 import com.example.marvelapp.databinding.FragmentCharactersBinding
+import com.example.marvelapp.framework.imageloader.ImageLoader
+import com.example.marvelapp.presentation.detail.DetailViewArg
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CharactersFragment : Fragment() {
@@ -26,7 +31,10 @@ class CharactersFragment : Fragment() {
 
     private val viewModel: CharactersViewModel by viewModels()
 
-    private lateinit var charactersAdapter : CharactersAdapter
+    @Inject
+    lateinit var imageLoader: ImageLoader
+
+    private lateinit var charactersAdapter: CharactersAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,12 +62,25 @@ class CharactersFragment : Fragment() {
     }
 
     private fun initCharactersAdapter() {
-        charactersAdapter = CharactersAdapter()
+        charactersAdapter = CharactersAdapter(imageLoader) { character, view ->
+            val extras = FragmentNavigatorExtras(
+                view to character.name
+            )
+            val directions = CharactersFragmentDirections.actionCharactersFragmentToDetailFragment(
+                character.name,
+                DetailViewArg(
+                    characterId = character.id,
+                    name = character.name,
+                    imageUrl = character.imageUrl
+                )
+            )
+            findNavController().navigate(directions, extras)
+        }
         binding.recyclerCharacters.apply {
             scrollToPosition(0)
             setHasFixedSize(true)
             adapter = charactersAdapter.withLoadStateFooter(
-                footer =  CharactersLoadStateAdapter { charactersAdapter.retry() }
+                footer = CharactersLoadStateAdapter { charactersAdapter.retry() }
             )
         }
     }
@@ -67,7 +88,7 @@ class CharactersFragment : Fragment() {
     private fun observeInitialLoading() {
         lifecycleScope.launch {
             charactersAdapter.loadStateFlow.collectLatest { loadState ->
-                binding.flipperCharacters.displayedChild = when(loadState.refresh){
+                binding.flipperCharacters.displayedChild = when (loadState.refresh) {
                     is LoadState.Loading -> {
                         setShimmerVisibility(visibility = true)
                         FLIPPER_CHILD_LOADING
@@ -88,13 +109,18 @@ class CharactersFragment : Fragment() {
         }
     }
 
-    private fun setShimmerVisibility(visibility: Boolean){
+    private fun setShimmerVisibility(visibility: Boolean) {
         binding.includeViewCharactersLoadingState.shimmerCharacters.run {
             isVisible = visibility
-            if(isVisible){
+            if (isVisible) {
                 startShimmer()
             } else stopShimmer()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {

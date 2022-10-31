@@ -1,18 +1,16 @@
 package com.example.marvelapp.framework.network.response
 
-import com.example.core.domain.model.Character
+import com.example.core.domain.model.Comic
 import com.google.gson.annotations.SerializedName
 
-data class CharactersResponse(
+data class ComicResponse(
     @SerializedName("id") val id : Int,
-    @SerializedName("name") val name : String,
     @SerializedName("thumbnail") val thumbnail: ThumbnailResponse
 )
 
-fun CharactersResponse.toCharacterModel() : Character {
-    return Character(
+fun ComicResponse.toComicModel() : Comic {
+    return Comic(
         id = this.id,
-        name = this.name,
         imageUrl = "${this.thumbnail.path}.${this.thumbnail.extension}"
             .replace("http","https")
     )

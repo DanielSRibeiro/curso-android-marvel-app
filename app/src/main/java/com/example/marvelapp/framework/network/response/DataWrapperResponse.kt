@@ -2,7 +2,7 @@ package com.example.marvelapp.framework.network.response
 
 import com.google.gson.annotations.SerializedName
 
-data class DataWrapperResponse(
+data class DataWrapperResponse<T>(
     @SerializedName("copyright") val copyright : String,
-    @SerializedName("data") val data : DataContainerResponse
+    @SerializedName("data") val data : DataContainerResponse<T>
 )

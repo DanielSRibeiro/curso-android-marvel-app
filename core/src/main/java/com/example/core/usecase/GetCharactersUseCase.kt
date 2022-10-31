@@ -7,7 +7,10 @@ import com.example.core.data.repository.CharactersRepository
 import com.example.core.usecase.base.PagingUseCase
 import com.example.core.domain.model.Character
 import com.example.core.usecase.GetCharactersUseCase.GetCharactersParams
+import com.example.core.usecase.base.ResultStatus
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 interface GetCharactersUseCase {
