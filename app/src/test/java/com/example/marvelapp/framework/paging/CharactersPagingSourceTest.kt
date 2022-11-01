@@ -1,6 +1,5 @@
 package com.example.marvelapp.framework.paging
 
-import android.accounts.NetworkErrorException
 import androidx.paging.PagingSource
 import com.example.core.data.repository.CharactersRemoteDataSource
 import com.example.core.domain.model.Character
