@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -48,7 +49,7 @@ class CharactersViewModelTest {
 
     @Test
     fun `should validate the paging data object values when calling charactersPagingData`() =
-        runBlockingTest {
+        runTest {
             whenever(
                 getCharactersUseCase.invoke(any())
             ).thenReturn(
@@ -62,7 +63,7 @@ class CharactersViewModelTest {
 
     @Test(expected = RuntimeException::class)
     fun `should throw an exception when the calling to the use case returns an exception`() =
-        runBlockingTest {
+        runTest {
             whenever(getCharactersUseCase.invoke(any()))
                 .thenThrow(RuntimeException())
 
